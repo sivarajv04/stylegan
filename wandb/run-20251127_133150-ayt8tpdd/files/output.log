@@ -1,0 +1,25 @@
+Starting training for 100000 iterations
+Training:   0%|                                                                                                                      | 0/100000 [00:23<?, ?it/s]
+Traceback (most recent call last):
+  File "F:\stylegan2-face-synthesis\training\trainer.py", line 83, in train
+    real_imgs = next(data_iter)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\utils\data\dataloader.py", line 631, in __next__
+    data = self._next_data()
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\utils\data\dataloader.py", line 1319, in _next_data
+    raise StopIteration
+StopIteration
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "F:\stylegan2-face-synthesis\train.py", line 76, in <module>
+    main()
+  File "F:\stylegan2-face-synthesis\train.py", line 71, in main
+    trainer.train(num_iterations)
+  File "F:\stylegan2-face-synthesis\training\trainer.py", line 86, in train
+    real_imgs = next(data_iter)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\utils\data\dataloader.py", line 631, in __next__
+    data = self._next_data()
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\utils\data\dataloader.py", line 1319, in _next_data
+    raise StopIteration
+StopIteration

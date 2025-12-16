@@ -1,0 +1,28 @@
+{
+  "os": "Windows-10-10.0.26100-SP0",
+  "python": "CPython 3.10.0",
+  "startedAt": "2025-11-27T08:25:52.179515Z",
+  "args": [
+    "--data",
+    "data/samples"
+  ],
+  "program": "F:\\stylegan2-face-synthesis\\train.py",
+  "codePath": "train.py",
+  "codePathLocal": "train.py",
+  "email": "tosivarajv@gmail.com",
+  "root": "F:\\stylegan2-face-synthesis",
+  "host": "DESKTOP-L1IP2L3",
+  "executable": "F:\\stylegan2-face-synthesis\\venv\\Scripts\\python.exe",
+  "cpu_count": 10,
+  "cpu_count_logical": 12,
+  "disk": {
+    "/": {
+      "total": "155724017664",
+      "used": "25607827456"
+    }
+  },
+  "memory": {
+    "total": "16849293312"
+  },
+  "writerId": "7f5rchd2uze9j1qp7nfxdneohtw82ip2"
+}

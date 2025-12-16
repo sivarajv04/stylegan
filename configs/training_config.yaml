@@ -1,0 +1,91 @@
+# StyleGAN2-ADA Training Configuration
+
+# Dataset settings
+dataset:
+  name: "celeba_hq"  # Options: celeba_hq, ffhq
+  path: "./data/celeba_hq_256"
+  resolution: 256  # 128, 256, 512, 1024
+  mirror: true  # Horizontal flip augmentation
+  num_workers: 4
+
+# Model architecture
+model:
+  name: "stylegan2_ada"
+  latent_dim: 512
+  map_depth: 8  # Mapping network layers
+  channels: 32  # Base channel multiplier
+  max_channels: 512
+
+# Training hyperparameters
+training:
+  batch_size: 4  # Adjust based on GPU memory
+  epochs: 100
+  iterations: 100000  # Alternative to epochs
+  
+  # Optimizer settings
+  lr_g: 0.002  # Generator learning rate
+  lr_d: 0.002  # Discriminator learning rate
+  beta1: 0.0
+  beta2: 0.99
+  
+  # Regularization
+  r1_gamma: 10.0  # R1 regularization weight
+  pl_weight: 2.0  # Path length regularization
+  
+  # ADA settings
+  ada_target: 0.6  # Target discriminator output
+  ada_interval: 4  # Update augmentation every N steps
+  ada_kimg: 500  # Half-life of adaptation
+  
+  # Mixed precision
+  use_amp: true
+  
+  # Exponential moving average
+  ema_kimg: 10  # Half-life in thousands of images
+  ema_rampup: 0.05  # Ramp-up factor
+
+# Checkpointing
+checkpoint:
+  save_interval: 1000  # Save every N iterations
+  keep_last_n: 5  # Keep only last N checkpoints
+  save_path: "./checkpoints"
+  
+# Logging
+logging:
+  log_interval: 100  # Log metrics every N iterations
+  sample_interval: 500  # Generate samples every N iterations
+  eval_interval: 5000  # Evaluate FID every N iterations
+  use_wandb: true  # Weights & Biases integration
+  wandb_project: "stylegan2-faces"
+  
+# Evaluation
+evaluation:
+  num_samples: 10000  # For FID/KID calculation
+  batch_size: 64
+  truncation_psi: 0.7  # Truncation for sampling
+  
+# Hardware
+hardware:
+  device: "cuda"  # cuda or cpu
+  gpu_ids: [0]  # Multi-GPU: [0, 1, 2, 3]
+  num_workers: 4
+  pin_memory: true
+
+# Baseline models (for comparison)
+baselines:
+  dcgan:
+    enabled: true
+    epochs: 50
+    lr: 0.0002
+    batch_size: 64
+  
+  progressive_gan:
+    enabled: true
+    phases: [4, 8, 16, 32, 64, 128, 256]
+    epochs_per_phase: 10
+  
+  lsgan:
+    enabled: true
+    epochs: 50
+    lr: 0.0002
+    batch_size: 64

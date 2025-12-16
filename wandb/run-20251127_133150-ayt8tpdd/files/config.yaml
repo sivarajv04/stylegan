@@ -1,0 +1,121 @@
+_wandb:
+    value:
+        cli_version: 0.23.0
+        e:
+            exmyt2af7yemlutre1bqesqlb5k9qc8q:
+                args:
+                    - --data
+                    - data/samples
+                codePath: train.py
+                codePathLocal: train.py
+                cpu_count: 10
+                cpu_count_logical: 12
+                disk:
+                    /:
+                        total: "155724017664"
+                        used: "25607794688"
+                executable: F:\stylegan2-face-synthesis\venv\Scripts\python.exe
+                host: DESKTOP-L1IP2L3
+                memory:
+                    total: "16849293312"
+                os: Windows-10-10.0.26100-SP0
+                program: F:\stylegan2-face-synthesis\train.py
+                python: CPython 3.10.0
+                root: F:\stylegan2-face-synthesis
+                startedAt: "2025-11-27T08:01:50.942919Z"
+                writerId: exmyt2af7yemlutre1bqesqlb5k9qc8q
+        m: []
+        python_version: 3.10.0
+        t:
+            "1":
+                - 1
+                - 41
+            "2":
+                - 1
+                - 41
+            "3":
+                - 16
+            "4": 3.10.0
+            "5": 0.23.0
+            "8":
+                - 3
+            "12": 0.23.0
+            "13": windows-amd64
+baselines:
+    value:
+        dcgan:
+            batch_size: 64
+            enabled: true
+            epochs: 50
+            lr: 0.0002
+        lsgan:
+            batch_size: 64
+            enabled: true
+            epochs: 50
+            lr: 0.0002
+        progressive_gan:
+            enabled: true
+            epochs_per_phase: 10
+            phases:
+                - 4
+                - 8
+                - 16
+                - 32
+                - 64
+                - 128
+                - 256
+checkpoint:
+    value:
+        keep_last_n: 5
+        save_interval: 1000
+        save_path: ./checkpoints
+dataset:
+    value:
+        mirror: true
+        name: celeba_hq
+        num_workers: 4
+        path: data/samples
+        resolution: 256
+evaluation:
+    value:
+        batch_size: 64
+        num_samples: 10000
+        truncation_psi: 0.7
+hardware:
+    value:
+        device: cuda
+        gpu_ids:
+            - 0
+        num_workers: 4
+        pin_memory: true
+logging:
+    value:
+        eval_interval: 5000
+        log_interval: 100
+        sample_interval: 500
+        use_wandb: true
+        wandb_project: stylegan2-faces
+model:
+    value:
+        channels: 32
+        latent_dim: 512
+        map_depth: 8
+        max_channels: 512
+        name: stylegan2_ada
+training:
+    value:
+        ada_interval: 4
+        ada_kimg: 500
+        ada_target: 0.6
+        batch_size: 16
+        beta1: 0
+        beta2: 0.99
+        ema_kimg: 10
+        ema_rampup: 0.05
+        epochs: 100
+        iterations: 100000
+        lr_d: 0.002
+        lr_g: 0.002
+        pl_weight: 2
+        r1_gamma: 10
+        use_amp: true

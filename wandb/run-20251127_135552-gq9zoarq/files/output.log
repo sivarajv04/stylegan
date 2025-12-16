@@ -1,0 +1,35 @@
+Starting training for 100000 iterations
+Training:   0%|                                                                                                                      | 0/100000 [00:00<?, ?it/s]F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\amp\autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+  warnings.warn(
+Training:   0%|                                                                         | 1/100000 [02:08<3574:33:14, 128.69s/it, G=2.693, D=1.389, aug_p=0.000]F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\amp\autocast_mode.py:250: UserWarning: User provided device_type of 'cuda', but CUDA is not available. Disabling
+Saved checkpoint: checkpoints\checkpoint_000000.pt
+  warnings.warn(
+Training:   0%|                                                                          | 9/100000 [10:04<1864:45:21, 67.14s/it, G=2.693, D=1.389, aug_p=0.000]
+Traceback (most recent call last):
+  File "F:\stylegan2-face-synthesis\train.py", line 76, in <module>
+    main()
+  File "F:\stylegan2-face-synthesis\train.py", line 71, in main
+    trainer.train(num_iterations)
+  File "F:\stylegan2-face-synthesis\training\trainer.py", line 94, in train
+    g_loss = self.train_generator()
+  File "F:\stylegan2-face-synthesis\training\trainer.py", line 181, in train_generator
+    fake_imgs = self.G(z)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\nn\modules\module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\nn\modules\module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "F:\stylegan2-face-synthesis\models\stylegan2_ada.py", line 159, in forward
+    x, rgb = block(x, w, rgb)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\nn\modules\module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\nn\modules\module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "F:\stylegan2-face-synthesis\models\stylegan2_ada.py", line 98, in forward
+    x = self.conv1(x, w)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\nn\modules\module.py", line 1511, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "F:\stylegan2-face-synthesis\venv\lib\site-packages\torch\nn\modules\module.py", line 1520, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "F:\stylegan2-face-synthesis\models\stylegan2_ada.py", line 61, in forward
+    out = F.conv2d(x, weight, padding=self.padding, groups=B)
+KeyboardInterrupt

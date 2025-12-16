@@ -1,0 +1,23 @@
+2025-11-27 13:55:52,185 INFO    MainThread:20580 [wandb_setup.py:_flush():80] Current SDK version is 0.23.0
+2025-11-27 13:55:52,185 INFO    MainThread:20580 [wandb_setup.py:_flush():80] Configure stats pid to 20580
+2025-11-27 13:55:52,185 INFO    MainThread:20580 [wandb_setup.py:_flush():80] Loading settings from C:\Users\sivar\.config\wandb\settings
+2025-11-27 13:55:52,185 INFO    MainThread:20580 [wandb_setup.py:_flush():80] Loading settings from F:\stylegan2-face-synthesis\wandb\settings
+2025-11-27 13:55:52,185 INFO    MainThread:20580 [wandb_setup.py:_flush():80] Loading settings from environment variables
+2025-11-27 13:55:52,185 INFO    MainThread:20580 [wandb_init.py:setup_run_log_directory():713] Logging user logs to F:\stylegan2-face-synthesis\wandb\run-20251127_135552-gq9zoarq\logs\debug.log
+2025-11-27 13:55:52,186 INFO    MainThread:20580 [wandb_init.py:setup_run_log_directory():714] Logging internal logs to F:\stylegan2-face-synthesis\wandb\run-20251127_135552-gq9zoarq\logs\debug-internal.log
+2025-11-27 13:55:52,186 INFO    MainThread:20580 [wandb_init.py:init():840] calling init triggers
+2025-11-27 13:55:52,186 INFO    MainThread:20580 [wandb_init.py:init():845] wandb.init called with sweep_config: {}
+config: {'dataset': {'name': 'celeba_hq', 'path': 'data/samples', 'resolution': 256, 'mirror': True, 'num_workers': 4}, 'model': {'name': 'stylegan2_ada', 'latent_dim': 512, 'map_depth': 8, 'channels': 32, 'max_channels': 512}, 'training': {'batch_size': 4, 'epochs': 100, 'iterations': 100000, 'lr_g': 0.002, 'lr_d': 0.002, 'beta1': 0.0, 'beta2': 0.99, 'r1_gamma': 10.0, 'pl_weight': 2.0, 'ada_target': 0.6, 'ada_interval': 4, 'ada_kimg': 500, 'use_amp': True, 'ema_kimg': 10, 'ema_rampup': 0.05}, 'checkpoint': {'save_interval': 1000, 'keep_last_n': 5, 'save_path': './checkpoints'}, 'logging': {'log_interval': 100, 'sample_interval': 500, 'eval_interval': 5000, 'use_wandb': True, 'wandb_project': 'stylegan2-faces'}, 'evaluation': {'num_samples': 10000, 'batch_size': 64, 'truncation_psi': 0.7}, 'hardware': {'device': 'cuda', 'gpu_ids': [0], 'num_workers': 4, 'pin_memory': True}, 'baselines': {'dcgan': {'enabled': True, 'epochs': 50, 'lr': 0.0002, 'batch_size': 64}, 'progressive_gan': {'enabled': True, 'phases': [4, 8, 16, 32, 64, 128, 256], 'epochs_per_phase': 10}, 'lsgan': {'enabled': True, 'epochs': 50, 'lr': 0.0002, 'batch_size': 64}}, '_wandb': {}}
+2025-11-27 13:55:52,186 INFO    MainThread:20580 [wandb_init.py:init():888] starting backend
+2025-11-27 13:55:54,676 INFO    MainThread:20580 [wandb_init.py:init():891] sending inform_init request
+2025-11-27 13:55:54,701 INFO    MainThread:20580 [wandb_init.py:init():899] backend started and connected
+2025-11-27 13:55:54,703 INFO    MainThread:20580 [wandb_init.py:init():969] updated telemetry
+2025-11-27 13:55:54,706 INFO    MainThread:20580 [wandb_init.py:init():993] communicating run to backend with 90.0 second timeout
+2025-11-27 13:55:55,924 INFO    MainThread:20580 [wandb_init.py:init():1040] starting run threads in backend
+2025-11-27 13:55:56,048 INFO    MainThread:20580 [wandb_run.py:_console_start():2504] atexit reg
+2025-11-27 13:55:56,048 INFO    MainThread:20580 [wandb_run.py:_redirect():2352] redirect: wrap_raw
+2025-11-27 13:55:56,049 INFO    MainThread:20580 [wandb_run.py:_redirect():2421] Wrapping output streams.
+2025-11-27 13:55:56,050 INFO    MainThread:20580 [wandb_run.py:_redirect():2444] Redirects installed.
+2025-11-27 13:55:56,054 INFO    MainThread:20580 [wandb_init.py:init():1080] run started, returning control to user process
+2025-11-27 14:06:01,024 INFO    wandb-AsyncioManager-main:20580 [service_client.py:_forward_responses():80] Reached EOF.
+2025-11-27 14:06:01,026 INFO    wandb-AsyncioManager-main:20580 [mailbox.py:close():137] Closing mailbox, abandoning 1 handles.
