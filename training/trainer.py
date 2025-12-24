@@ -58,12 +58,13 @@ class StyleGAN2Trainer:
         # Tracking
         self.iteration = 0
 
-        # Paths
-        self.checkpoint_dir = Path(config["checkpoint"]["save_path"])
-        self.checkpoint_dir.mkdir(exist_ok=True)
+        # Paths (SAVE DIRECTLY TO GOOGLE DRIVE)
+        self.checkpoint_dir = Path("/content/drive/MyDrive/stylegan_checkpoints")
+        self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
-        self.sample_dir = Path("outputs/training_samples")
+        self.sample_dir = Path("/content/drive/MyDrive/stylegan_samples")
         self.sample_dir.mkdir(parents=True, exist_ok=True)
+
 
         # W&B logging
         if config["logging"]["use_wandb"]:
