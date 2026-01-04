@@ -1,9 +1,11 @@
+# StyleGAN2-ADA Training Configuration for 200K Dataset
+
 dataset:
   name: "celeba"
-  path: "data/celeba"
+  path: "./data/celeba"  # Will be symlinked
   resolution: 256
-  mirror: true
-  num_workers: 2
+  mirror: true  # Horizontal flip = 400K effective samples
+  num_workers: 4
 
 model:
   name: "stylegan2_ada"
@@ -13,41 +15,70 @@ model:
   max_channels: 512
 
 training:
-  batch_size: 16
-  iterations: 30000
-
-  lr_g: 0.001
-  lr_d: 0.001
+  batch_size: 16  # SAFE for T4 (32 causes OOM!)
+  epochs: 100
+  iterations: 25000  # CORRECTED: 200K images = 25K is sufficient
+  
+  # Optimizer
+  lr_g: 0.002
+  lr_d: 0.002
   beta1: 0.0
   beta2: 0.99
-
-  r1_gamma: 5.0
-  ada_target: 0.4
-  ada_interval: 16
-
+  
+  # Regularization
+  r1_gamma: 10.0
+  pl_weight: 2.0
+  
+  # ADA
+  ada_target: 0.6
+  ada_interval: 4
+  ada_kimg: 500
+  
+  # Mixed precision
   use_amp: true
+  
+  # EMA
+  ema_kimg: 10
+  ema_rampup: 0.05
 
 checkpoint:
-  save_interval: 1000
+  save_interval: 1000  # Keep frequent for Colab disconnects
   keep_last_n: 5
   save_path: "./checkpoints"
-
+  
 logging:
   log_interval: 100
-  sample_interval: 500
+  sample_interval: 500  # More frequent monitoring
+  eval_interval: 5000   # Every 5K iterations
   use_wandb: true
-  wandb_project: "stylegan2-faces"
-
+  wandb_project: "stylegan2-faces-200k"
+  
 evaluation:
   num_samples: 10000
   batch_size: 64
   truncation_psi: 0.7
-
+  
 hardware:
   device: "cuda"
-  num_workers: 2
+  gpu_ids: [0]
+  num_workers: 2  # CHANGED: 4 → 2 for Colab stability
   pin_memory: true
 
+baselines:
+  dcgan:
+    enabled: true
+    epochs: 50
+    lr: 0.0002
+    batch_size: 64
+  progressive_gan:
+    enabled: true
+    phases: [4, 8, 16, 32, 64, 128, 256]
+    epochs_per_phase: 10
+  lsgan:
+    enabled: true
+    epochs: 50
+    lr: 0.0002
+    batch_size: 64
 
 # # StyleGAN2-ADA Training Configuration
 
