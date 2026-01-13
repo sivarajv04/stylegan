@@ -181,9 +181,10 @@ class StyleGAN2Trainer:
 
         self.scaler_D.scale(d_loss).backward()
         self.scaler_D.unscale_(self.optimizer_D)
-        torch.nn.utils.clip_grad_norm_(
+        grad_norm_d = torch.nn.utils.clip_grad_norm_(
             self.D.parameters(), max_norm=1.0
         )
+
 
         self.scaler_D.step(self.optimizer_D)
         self.scaler_D.update()
@@ -213,7 +214,7 @@ class StyleGAN2Trainer:
 
         self.scaler_G.scale(g_loss).backward()
         self.scaler_G.unscale_(self.optimizer_G)
-        torch.nn.utils.clip_grad_norm_(
+        grad_norm_g = torch.nn.utils.clip_grad_norm_(
             self.G.parameters(), max_norm=1.0
         )
 
