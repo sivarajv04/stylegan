@@ -1,0 +1,64 @@
+# StyleGAN2-ADA Colab Training Configuration
+
+dataset:
+  name: "celeba"
+  path: "./data/celeba/img_align_celeba"  # Will be downloaded from Kaggle
+  resolution: 256
+  mirror: true  # Horizontal flip = double effective dataset
+  num_workers: 2  # Colab has limited CPU cores
+
+model:
+  name: "stylegan2_ada"
+  latent_dim: 512
+  map_depth: 8
+  channels: 32
+  max_channels: 512
+
+training:
+  batch_size: 16  # Safe for T4 GPU (16GB VRAM)
+  iterations: 25000  # ~200K images with batch 16
+  
+  # Optimizer
+  lr_g: 0.0015
+  lr_d: 0.001
+  beta1: 0.0
+  beta2: 0.99
+  
+  # Regularization
+  r1_gamma: 5.0
+  pl_weight: 2.0
+  
+  # ADA (Adaptive Discriminator Augmentation)
+  ada_target: 0.6
+  ada_interval: 4
+  ada_kimg: 500
+  
+  # Mixed precision (faster training on GPU)
+  use_amp: true
+  
+  # EMA (Exponential Moving Average)
+  ema_kimg: 10
+  ema_rampup: 0.05
+
+checkpoint:
+  save_interval: 500  # Save every 500 iterations for Colab safety
+  keep_last_n: 5  # Keep only last 5 checkpoints to save space
+  save_path: "./checkpoints"  # Will be overridden by --checkpoint-dir
+  
+logging:
+  log_interval: 100  # Log metrics every 100 iterations
+  sample_interval: 500  # Generate samples every 500 iterations
+  eval_interval: 5000  # Evaluate FID every 5000 iterations
+  use_wandb: true  # Enable Weights & Biases tracking
+  wandb_project: "stylegan2-faces-colab"
+  
+evaluation:
+  num_samples: 10000  # For FID/KID calculation
+  batch_size: 64
+  truncation_psi: 0.7  # Truncation for sampling
+  
+hardware:
+  device: "cuda"  # Use GPU
+  gpu_ids: [0]
+  num_workers: 2  # Data loading workers
+  pin_memory: true  # Faster GPU transfer

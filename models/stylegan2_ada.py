@@ -48,9 +48,9 @@ class ModulatedConv2d(nn.Module):
         style = self.affine(w).view(B, 1, C, 1, 1)
         weight = self.weight.unsqueeze(0) * (style + 1)
         
-        # Demodulation
+        # Demodulation (epsilon increased for FP16 stability)
         if self.demodulate:
-            sigma = torch.rsqrt((weight ** 2).sum(dim=[2, 3, 4], keepdim=True) + 1e-8)
+            sigma = torch.rsqrt((weight ** 2).sum(dim=[2, 3, 4], keepdim=True) + 1e-5)
             weight = weight * sigma
         
         # Reshape for group conv

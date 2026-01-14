@@ -1,0 +1,61 @@
+dataset:
+  name: "celeba_local"
+  path: "F:\\stylegan2-face-synthesis\\archive\\img_align_celeba\\img_align_celeba"
+  resolution: 256
+  mirror: true
+  num_workers: 2  # Conservative for local testing
+
+model:
+  name: "stylegan2_ada"
+  latent_dim: 512
+  map_depth: 8
+  channels: 32
+  max_channels: 512
+
+training:
+  batch_size: 16
+  iterations: 500  # Short test run
+  
+  # Conservative learning rates
+  lr_g: 0.0015
+  lr_d: 0.001
+  beta1: 0.0
+  beta2: 0.99
+  
+  # Regularization (reduced for stability)
+  r1_gamma: 5.0
+  pl_weight: 2.0
+  
+  # ADA
+  ada_target: 0.6
+  ada_interval: 4
+  ada_kimg: 500
+  
+  # Mixed precision
+  use_amp: true
+
+# Local paths for Windows
+checkpoint_dir: "F:\\stylegan2-face-synthesis\\checkpoints"
+sample_dir: "F:\\stylegan2-face-synthesis\\outputs\\samples"
+
+checkpoint:
+  save_interval: 100  # Save frequently for testing
+  keep_last_n: 10
+
+logging:
+  log_interval: 10  # Log frequently for monitoring
+  sample_interval: 50  # Generate samples often
+  eval_interval: 500
+  use_wandb: true
+  wandb_project: "stylegan2-local-test"
+
+evaluation:
+  num_samples: 1000
+  batch_size: 32
+  truncation_psi: 0.7
+
+hardware:
+  device: "cuda"
+  gpu_ids: [0]
+  num_workers: 2
+  pin_memory: true

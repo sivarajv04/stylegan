@@ -13,18 +13,36 @@ from training.trainer import StyleGAN2Trainer
 
 def main():
     parser = argparse.ArgumentParser(description='Train StyleGAN2-ADA')
-    parser.add_argument('--config', type=str, default='configs/training_config.yaml')
-    parser.add_argument('--resume', type=str, default=None)
-    parser.add_argument('--data', type=str, default=None)
+    parser.add_argument('--config', type=str, default='configs/training_config.yaml',
+                       help='Path to config file')
+    parser.add_argument('--resume', type=str, default=None,
+                       help='Path to checkpoint to resume from')
+    parser.add_argument('--data', type=str, default=None,
+                       help='Override dataset path from config')
+    parser.add_argument('--checkpoint-dir', type=str, default=None,
+                       help='Override checkpoint save directory')
+    parser.add_argument('--output-dir', type=str, default=None,
+                       help='Override output directory for samples/logs')
     args = parser.parse_args()
     
     # Load config
     with open(args.config) as f:
         config = yaml.safe_load(f)
     
-    # Override data path if provided
+    # Override paths if provided via command line
     if args.data:
         config['dataset']['path'] = args.data
+        print(f"Dataset path overridden to: {args.data}")
+    
+    if args.checkpoint_dir:
+        config['checkpoint']['save_path'] = args.checkpoint_dir
+        print(f"Checkpoint directory overridden to: {args.checkpoint_dir}")
+    
+    if args.output_dir:
+        # Create output directory structure
+        Path(args.output_dir).mkdir(parents=True, exist_ok=True)
+        config['output_dir'] = args.output_dir
+        print(f"Output directory set to: {args.output_dir}")
     
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     print(f"Using device: {device}")

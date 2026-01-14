@@ -58,11 +58,11 @@ class StyleGAN2Trainer:
         # Tracking
         self.iteration = 0
 
-        # Paths (SAVE DIRECTLY TO GOOGLE DRIVE)
-        self.checkpoint_dir = Path("/content/drive/MyDrive/stylegan_checkpoints")
+        # Paths (configurable for local/cloud)
+        self.checkpoint_dir = Path(config.get("checkpoint_dir", "./checkpoints"))
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
 
-        self.sample_dir = Path("/content/drive/MyDrive/stylegan_samples")
+        self.sample_dir = Path(config.get("sample_dir", "./outputs/samples"))
         self.sample_dir.mkdir(parents=True, exist_ok=True)
 
 
@@ -120,6 +120,9 @@ class StyleGAN2Trainer:
                             "d_real": d_real.mean().item(),
                             "d_fake": d_fake.mean().item(),
                             "aug_p": self.aug_p,
+                            "d_real_mean": d_real.mean().item(),
+                            "d_fake_mean": d_fake.mean().item(),
+                            "score_gap": d_real.mean().item() - d_fake.mean().item(),
                         },
                         step=iteration,
                     )
@@ -164,7 +167,7 @@ class StyleGAN2Trainer:
             aug_real = aug_real.detach().requires_grad_(True)
 
             with autocast(enabled=False):
-                real_scores_grad = self.D(aug_real)
+                real_scores_grad = self.D(aug_real.float())
                 r1_grads = torch.autograd.grad(
                     outputs=real_scores_grad.sum(),
                     inputs=aug_real,
@@ -172,12 +175,20 @@ class StyleGAN2Trainer:
                     only_inputs=True,
                 )[0]
 
-                r1_penalty = r1_grads.pow(2).sum([1, 2, 3]).mean()
+                # Add epsilon for numerical stability (prevents underflow/overflow)
+                r1_penalty = (r1_grads.pow(2).sum([1, 2, 3]) + 1e-6).mean()
 
-            d_loss = d_loss + r1_penalty * (self.r1_gamma / 2)
+            # Ensure dtype consistency for AMP (critical fix for FP32/FP16 mixing)
+            r1_term = (r1_penalty * (self.r1_gamma / 2)).to(d_loss.dtype)
+            d_loss = d_loss + r1_term
 
         # Backward (AMP-safe + clipping)
         self.optimizer_D.zero_grad()
+
+        # Check for NaN before backward pass
+        if torch.isnan(d_loss) or torch.isinf(d_loss):
+            print(f"⚠️ WARNING: Invalid D loss at iter {self.iteration}: {d_loss.item()}")
+            return 0.0, real_scores.detach(), fake_scores.detach()
 
         self.scaler_D.scale(d_loss).backward()
         self.scaler_D.unscale_(self.optimizer_D)
@@ -185,6 +196,11 @@ class StyleGAN2Trainer:
             self.D.parameters(), max_norm=1.0
         )
 
+        # Monitor for gradient explosion
+        if torch.isnan(grad_norm_d) or grad_norm_d > 100.0:
+            print(f"⚠️ WARNING: D gradient explosion at iter {self.iteration}: {grad_norm_d:.2f}")
+            if torch.isnan(grad_norm_d):
+                raise RuntimeError("NaN detected in discriminator gradients!")
 
         self.scaler_D.step(self.optimizer_D)
         self.scaler_D.update()
@@ -212,11 +228,22 @@ class StyleGAN2Trainer:
 
         self.optimizer_G.zero_grad()
 
+        # Check for NaN before backward pass
+        if torch.isnan(g_loss) or torch.isinf(g_loss):
+            print(f"⚠️ WARNING: Invalid G loss at iter {self.iteration}: {g_loss.item()}")
+            return 0.0
+
         self.scaler_G.scale(g_loss).backward()
         self.scaler_G.unscale_(self.optimizer_G)
         grad_norm_g = torch.nn.utils.clip_grad_norm_(
             self.G.parameters(), max_norm=1.0
         )
+
+        # Monitor for gradient explosion
+        if torch.isnan(grad_norm_g) or grad_norm_g > 100.0:
+            print(f"⚠️ WARNING: G gradient explosion at iter {self.iteration}: {grad_norm_g:.2f}")
+            if torch.isnan(grad_norm_g):
+                raise RuntimeError("NaN detected in generator gradients!")
 
         self.scaler_G.step(self.optimizer_G)
         self.scaler_G.update()

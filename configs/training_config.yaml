@@ -19,14 +19,14 @@ training:
   epochs: 100
   iterations: 25000  # CORRECTED: 200K images = 25K is sufficient
   
-  # Optimizer
-  lr_g: 0.002
-  lr_d: 0.002
+  # Optimizer (reduced for stability)
+  lr_g: 0.0015
+  lr_d: 0.001
   beta1: 0.0
   beta2: 0.99
   
-  # Regularization
-  r1_gamma: 10.0
+  # Regularization (reduced gamma for lower D lr)
+  r1_gamma: 5.0
   pl_weight: 2.0
   
   # ADA
